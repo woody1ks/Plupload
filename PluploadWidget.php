@@ -97,7 +97,15 @@ class PluploadWidget extends CWidget {
           $this->config['file_data_name'] = get_class($this->model)."[$this->attribute]";
         }
 
-        $jsConfig = json_encode($this->config);
+				$jsConfig = '{';
+				foreach ($this->config as $key => $value) {
+					if ($value == 'attachCallbacks') {
+						$jsConfig .= $key . ": " . $value. ",";
+					} else {
+						$jsConfig .= $key . ": '" . $value. "',";
+					}
+				}
+				$jsConfig .= '}';
         $jqueryScript = "jQuery('#$this->id').pluploadQueue({$jsConfig});";
         $uniqueId = 'Yii.' . __CLASS__ . '#' . $this->id;
         Yii::app()->clientScript->registerScript($uniqueId, stripcslashes($jqueryScript), CClientScript::POS_READY);
